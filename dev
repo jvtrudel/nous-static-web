@@ -12,7 +12,13 @@ dev()(
 
   _run(){
     local command=${1:-}
-    docker run -d -v $SRC/:/src/ --name $CONTAINER_NAME $IMAGE_NAME $command 
+    if [ -z "${OUTPUT_DIR:-}" ] ; then
+      docker run -d -v $SRC/:/src/ --name $CONTAINER_NAME $IMAGE_NAME $command 
+    else
+      docker run -d \
+	  -e OUTPUT_DIR="$OUTPUT_DIR" \
+	  -v $SRC/:/src/ --name $CONTAINER_NAME $IMAGE_NAME $command 
+    fi
   }
 
   sh_(){
@@ -34,7 +40,14 @@ dev()(
     docker rmi $IMAGE_NAME
   }
 
-  up(){
+  up(){ 
+    local OPTIND opt
+    while getopts "c:" opt; do
+    case "$opt" in
+      c) OUTPUT_DIR=$(readlink -f "$OPTARG") ;;
+    esac
+    done
+
     _build || true
     _run   || true
   }
@@ -45,6 +58,8 @@ dev()(
     _rmi  || true
   }
   
+  local WORKDIR_
+
   case "${1:-}" in
     up) set -- up ${@:2} ;;
     down) set -- down ${@:2} ;;
