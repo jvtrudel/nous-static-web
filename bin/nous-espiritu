@@ -1,0 +1,51 @@
+#! /bin/bash
+
+nous-espiritu()(
+
+  local SRC="$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")")" 
+  . "$SRC"/lib/core/main 
+    . "$SRC"/lib/core/fs
+    . "$SRC"/lib/nous/main
+
+  inicia(){
+    local OPTIND opt
+    while getopts "i" opt; do
+    case "$opt" in 
+      i) INTERACTIVO=true ;;
+    esac
+    done
+    shift $((OPTIND -1))
+    afirma_archivo_no_existe "$WORKDIR_"/espiritu.yml
+
+   if [ "${INTERACTIVO:-}" = true ]; then
+      local file_=$(mktemp /tmp/XXXX)
+      trap_add "rm \"$file_\"" EXIT
+      cat "$SRC/defecto/espiritu.yml" > "$file_"
+      vim "$file_"
+      cat "$file_" > "$WORKDIR_"/espiritu.yml
+   else
+      cat "$SRC"/defecto/espiritu.yml > "$WORKDIR_"/espiritu.yml 
+   fi
+  }
+  muestra(){
+    cat "$WORKDIR_"/espiritu.yml 
+  }
+  revisa(){
+    yajsv -s "$SRC"/schemas/espiritu.yml "$WORKDIR_"/espiritu.yml 
+  }
+
+  local OPTIND opt
+  local WORKDIR_="$(pwd)"
+  while getopts "dc:" opt; do
+  case "$opt" in 
+    c) WORKDIR_="$OPTARG" ;;
+    d) set -x ;;
+  esac
+  done
+  shift $((OPTIND -1))
+  afirma_esta_nous_proyecto "$WORKDIR_"
+  
+"$@"
+)
+
+[ "${BASH_SOURCE[0]}" != "$0" ] || nous-espiritu "$@"

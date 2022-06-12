@@ -1,0 +1,18 @@
+$id: "https://schemas.noumanity.dev/v0/espiritu.yaml"
+$schema: "https://json-schema.org/draft/2020-12/schema"
+title: espiritu
+type: object
+properties:
+  nombre:
+    description: Nombre del projecto
+    type: string
+  descripcion:
+    description: Descripción del proyecto
+    type: string
+  proposito:
+    description: Razôn de ser del proyecto
+    type: string
+required:
+  - nombre
+  - descripcion
+  - proposito

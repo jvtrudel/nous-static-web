@@ -1,0 +1,10 @@
+#! /bin/bash
+
+set -eu -o pipefail
+
+
+afirma_esta_nous_proyecto(){
+  [ -f "${1:-.}/.nous-proyecto" ] || err "Repositorio '${1:-.}' no está un 'nous' proyecto" 
+}
+
+

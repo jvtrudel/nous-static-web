@@ -13,7 +13,8 @@
 
   **nous-proyecto**  inicia \[-c PATH\] \[-jg\]  NOMBRE
 
-  **nous-proyecto**  espiritu inicia \[-i\]\ 
+  **nous-proyecto**  espiritu inicia \[-i\]\
+  **nous-proyecto**  espiritu revisa\
   **nous-proyecto**  espiritu muestra
  
   **nous-proyecto**  estructura inicia\

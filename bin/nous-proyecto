@@ -39,6 +39,10 @@ nous-proyecto()(
     mkdir -p "$path"
     touch "$path/.nous-proyecto"
 
+    [ "${GENERA_EJEMPLO:-}" != true ] || {
+      "$SRC"/bin/nous-espiritu -c "$path" inicia
+      warning "GENERA EJEMPLO not implemented"
+    }
     [ "${GIT_INICIA:-}" != true ] || {
       . "$SRC"/lib/core/gitw
       afirma_no_esta_gitrepo "$path"
@@ -46,7 +50,6 @@ nous-proyecto()(
       git -C "$path" add . &> /dev/null
       git -C "$path" commit -m "init nous-proyect $NOMBRE" &> /dev/null
     }
-    [ "${GENERA_EJEMPLO:-}" != true ] ||  warning "GENERA EJEMPLO not implemented"
 
   }
 
@@ -54,8 +57,14 @@ nous-proyecto()(
   case "$opt" in
     d) set -x ;;
   esac
-done
-shift $((OPTIND -1))
+  done
+  shift $((OPTIND -1))
+
+  case "${1:-none}" in
+    --help|uso|none) set -- uso ;;
+    i|ini|init|inicia) set -- inicia "${@:2}" ;;
+    e|esp|espiritu) set -- "$SRC"/bin/nous-espiritu "${@:2}" ;;
+  esac
 
 "$@"
 )
