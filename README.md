@@ -1,5 +1,6 @@
 # nous-static-web
 
+[FR](./README.fr_CA.md)
 
 Implementación de [nous](https://github.com/noumanity/nous) por un sitio web.
 
@@ -69,4 +70,6 @@ echo "export PATH=$PATH:$(pwd)/bin" >> ~/.bashrc
 ````
 
 
+## Proyecto
 
+[explicatión en francés](./README.fr_CA.md###Projet)
