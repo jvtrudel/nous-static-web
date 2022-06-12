@@ -1,0 +1,65 @@
+#! /bin/bash
+
+nous-proyecto()(
+  set -eu -o pipefail 
+
+  local SRC="$(dirname "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")")" 
+  . "$SRC"/lib/core/main
+
+  uso(){
+    pandoc --standalone --to man "$SRC/doc/nous-proyecto.md" | man -l -
+  }
+
+
+
+  inicia(){
+    . "$SRC"/lib/core/fs
+    local OPTIND opt path
+    while getopts "c:jg" opt; do
+    case "$opt" in
+      c) path="$(readlink -f "$OPTARG")" ;;
+      j) GENERA_EJEMPLO=true ;;
+      g) GIT_INICIA=true ;;
+    esac
+    done
+    shift $((OPTIND -1 ))
+  
+    NOMBRE=${1:-.}
+
+    [ -z "${path:-}" ] && {
+      path="$NOMBRE" ;
+      path="$(readlink -f "$path")"
+    } || {
+      path="$path/$NOMBRE" ;
+      path="$(readlink -f "$path")"
+      afirma_repertorio_no_existe "$path"
+    }
+    
+    afirma_archivo_no_existe "$path/.nous-proyecto" || warning "El repositori '$path' es un proyecto nous"
+    mkdir -p "$path"
+    touch "$path/.nous-proyecto"
+
+    [ "${GIT_INICIA:-}" != true ] || {
+      . "$SRC"/lib/core/gitw
+      afirma_no_esta_gitrepo "$path"
+      git -C "$path" init &> /dev/null
+      git -C "$path" add . &> /dev/null
+      git -C "$path" commit -m "init nous-proyect $NOMBRE" &> /dev/null
+    }
+    [ "${GENERA_EJEMPLO:-}" != true ] ||  warning "GENERA EJEMPLO not implemented"
+
+  }
+
+  while getopts "d" opt; do
+  case "$opt" in
+    d) set -x ;;
+  esac
+done
+shift $((OPTIND -1))
+
+"$@"
+)
+
+[ "${BASH_SOURCE[0]}" != "$0" ] || nous-proyecto "$@"
+
+

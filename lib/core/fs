@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+afirma_repertorio_existe(){
+  [ -d "${1:-}" ] || err "Repertorio '${1:-}' no existe"
+}
+
+afirma_repertorio_no_existe(){
+  [ ! -d "${1:-}" ] || err "Repertorio '${1:-}' existe"
+}
+
+afirma_archivo_existe(){
+  [ -f "${1:-}" ] || err "Archivo '${1:-}' no existe"
+}
+
+afirma_archivo_no_existe(){
+  [ ! -f "${1:-}" ] || err "Archivo '${1:-}' existe"
+}

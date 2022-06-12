@@ -1,0 +1,17 @@
+#! /bin/bash
+
+esta_gitrepo(){
+  git -C "${1:-.}" rev-parse --is-inside-work-tree &> /dev/null
+}
+
+no_esta_gitrepo(){
+  ! esta_gitrepo "${1:-.}"
+}
+
+afirma_esta_gitrepo(){
+  esta_gitrepo "${1:-.}" || err "Reposito '${1:-.}' no está un git repo"
+}
+
+afirma_no_esta_gitrepo(){
+  no_esta_gitrepo "${1:-.}" || err "Reposito '${1:-.}' está un git repo"
+}

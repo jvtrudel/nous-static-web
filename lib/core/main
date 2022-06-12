@@ -1,0 +1,7 @@
+#! /bin/bash
+
+set -eu -o pipefail
+
+fatal(){ >&2 echo "FATAL:\n$*" && exit 1; }
+err(){ >&2 echo "$*" ; return 1; }
+warning(){ >&2 echo "WARNING: $*" ; }
