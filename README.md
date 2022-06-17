@@ -94,4 +94,8 @@ echo "export PATH=$PATH:$(pwd)/bin" >> ~/.bashrc
 ````
 
 
+# Ejemplos
 
+## El blog de noumanity
+
+![nous framework apicado al blog de noumanity](./doc/assets/tecnico_de_construccion.svg)
